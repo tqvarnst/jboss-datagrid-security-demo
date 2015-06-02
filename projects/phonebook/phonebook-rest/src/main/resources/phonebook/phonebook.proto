@@ -1,0 +1,33 @@
+package phonebook;
+
+/* @Indexed */
+message Person {
+
+   /* @IndexedField */
+   required string id = 1;
+   /* @IndexedField */
+   required string firstname = 2;
+   /* @IndexedField */
+   required string surname = 3;
+   
+   optional string email = 4;
+
+   enum PhoneType {
+      MOBILE = 0;
+      HOME = 1;
+      WORK = 2;
+   }
+
+   /* @Indexed */
+   message PhoneNumber {
+
+      /* @IndexedField */
+      required string number = 1;
+
+      /* @IndexedField(index=false, store=false) */
+      optional PhoneType type = 2 [default = HOME];
+   }
+
+   /* @IndexedField(index=true, store=false) */
+   repeated PhoneNumber phone = 5;
+}

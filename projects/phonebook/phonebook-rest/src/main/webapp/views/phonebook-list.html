@@ -1,0 +1,142 @@
+<h1>Employee Contact List</h1>
+
+<div class="alert alert-{{alert.type}}" ng-repeat="alert in alerts" ng-switch on="alert.type">
+        <span class="pficon-layered" ng-switch-when="warning">
+          <span class="pficon pficon-warning-triangle"></span>
+          <span class="pficon pficon-warning-exclamation"></span>
+        </span>
+        <span class="pficon pficon pficon-info" ng-switch-when="info"/>
+		<span class="pficon-layered" ng-switch-when="danger">
+          <span class="pficon pficon-error-octagon"></span>
+          <span class="pficon pficon-error-exclamation"></span>
+        </span>
+		<span class="pficon pficon-ok" ng-switch-when="success"/>
+        <div ng-bind-html="alert.message"/>
+		
+</div>
+
+<div class="alert alert-info" ng-if="connectiondetails.connected">
+	<span class="pficon pficon pficon-info"/>
+	<div>Connected using <strong>{{connectiondetails.supportedConfigurations[connectionProfile]}}</strong> to <strong>{{connectiondetails.host}}</strong> using port <strong>{{connectiondetails.port}}</strong> as user <strong>{{connectiondetails.user}}</strong>. Cache contains <strong>{{connectiondetails.size}}</strong> entries</div> 
+</div>
+
+<div class="alert alert-info"  ng-if="!connectiondetails.connected">
+	<span class="pficon pficon pficon-info"/>
+	<p><strong>You are not connected, connect to see the employee phonebook</strong></p>
+</div>
+
+<div ng-if="!connectiondetails.connected">
+	<a class="btn btn-primary" data-toggle="modal" data-target="#connectionmodal"><span class="glyphicon glyphicon-play icon-white"></span> Connect </a> 
+</div>
+
+<div ng-if="connectiondetails.connected">
+	<a class="btn btn-primary" href="" ng-click="disconnect()"><span class="glyphicon glyphicon-stop icon-white"></span> Disconnect </a> 
+	<a class="btn btn-primary" href="" ng-click="clear()"><span class="glyphicon glyphicon-remove-sign icon-white"></span> Clear</a>
+	<a class="btn btn-primary" href="" ng-click="generate()"><span class="glyphicon glyphicon-plus-sign icon-white"></span> Generate </a> 
+</div>
+
+<div ng-if="connectiondetails.connected && persons.length==0">
+	No content available!
+</div>
+
+<table class="datatable table table-striped table-bordered" ng-if="connectiondetails.connected && persons.length>0">
+	<thead>
+	  <tr>
+	    <th>Name</th>
+	    <th>Email</th>
+	    <th>Phone numbers</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="person in persons track by person.id">
+	    <td><a href="" data-toggle="modal" data-target="#{{person.id}}">{{person.firstname}} {{person.surname}}</a></td>
+	    <td>{{person.email}}</td>
+	    <td>
+	    	<span ng-repeat="phone in person.phones">
+	    		{{ phone.type + ': ' + phone.number }}<br/> 
+	    	</span>
+	    </td>
+	  </tr>
+	</tbody>
+</table>
+
+<div ng-repeat="person in persons track by person.id">
+  <div class="modal fade" id="{{person.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	        <span class="pficon pficon-close"></span>
+	      </button>
+	      <h4 class="modal-title" id="myModalLabel">Contact details</h4>
+	    </div>
+	    <div class="modal-body">
+			<h3>{{person.firstname}} {{person.surname}}</h3>
+			<b>Email:</b> {{person.email}}<br/>
+			<b>Phonenumber:</b>
+			
+			<table class="datatable table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Number</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="phone in person.phones">
+				<td>{{phone.type}}</td><td>{{phone.number}}</td>
+			</tr>
+			</table>
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="connectionmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" closable-modal>
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	        <span class="pficon pficon-close"></span>
+	      </button>
+	      <h4 class="modal-title" id="myModalLabel">Connection details</h4>
+	    </div>
+	    <div class="modal-body">
+	    	<table cellspacing="2" cellpadding="2" border="0">
+	    	<tr>
+	    		<td>
+					<b>Select Profile:</b>
+				</td>
+				<td>
+					<select ng-model="connectionProfile">
+						<option ng-repeat="(key, value) in connectiondetails.supportedConfigurations" value="{{key}}">{{value}}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>	
+				<td>
+					<b>Username:</b>
+				</td>
+				<td>
+					<input type="text" ng-model="username" ng-disabled="connectionProfile==null || connectionProfile.indexOf('auth') != 0"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Password:</b>
+				</td>
+				<td>
+					<input type="text" ng-model="password" ng-disabled="connectionProfile==null || connectionProfile.indexOf('auth') != 0"/>
+				</td>
+			</tr>
+			</table>
+		</div>
+		
+		
+		<div class="modal-footer">
+          <button type="button" class="btn btn-blue" ng-click="connect()">Connect</button>
+        </div>
+	  </div>
+	</div>
+  </div>

@@ -1,0 +1,12 @@
+target
+runtime
+workspace
+installs/*.zip
+.settings
+.settings/*
+.project
+*.docx
+*.log
+drawings/*
+JDG 6.3 GTM.final.pdf
+containers

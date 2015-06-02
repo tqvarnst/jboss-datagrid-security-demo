@@ -1,0 +1,107 @@
+<h1>{{pageHeading}}</h1>
+<div class="alert alert-{{alert.type}}" ng-repeat="alert in alerts" ng-switch on="alert.type">
+        <span class="pficon-layered" ng-switch-when="warning">
+          <span class="pficon pficon-warning-triangle"></span>
+          <span class="pficon pficon-warning-exclamation"></span>
+        </span>
+        <span class="pficon pficon pficon-info" ng-switch-when="info"/>
+		<span class="pficon-layered" ng-switch-when="danger">
+          <span class="pficon pficon-error-octagon"></span>
+          <span class="pficon pficon-error-exclamation"></span>
+        </span>
+		<span class="pficon pficon-ok" ng-switch-when="success"/>
+        <div ng-bind-html="alert.message"/>
+		
+</div>
+
+
+<table class="datatable table table-striped table-bordered" ng-if="demos.length>0">
+	<thead>
+	  <tr>
+	    <th>Title</th>
+	    <th>Level</th>
+	    <th>Summary</th>
+	    <th>Technologies</th>
+	    <th>Products</th>
+	    <th>Authors</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="demo in demos track by demo.id">
+	    <td><a href=""
+   data-toggle="modal"
+   data-target="#{{demo.id}}">{{demo.name}}</a></td>
+	    <td>{{demo.level}}</td>
+	    <td>{{demo.summary}}</td>
+	    <td><span ng-repeat="technology in demo.technologies">{{ $last ? (technology) : (technology +', ')}}</span></td>
+	    <td>{{demo.targetProduct}}</td>
+	    <td>{{demo.author}}</td>
+	  </tr>
+	</tbody>
+</table>
+
+<script>
+  // Initialize Datatables
+  //$(document).ready( function() {
+  //  $('.datatable').dataTable();
+  //});
+</script>
+  
+<div ng-repeat="demo in demos track by demo.id">
+  <div class="modal fade" id="{{demo.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	        <span class="pficon pficon-close"></span>
+	      </button>
+	      <h4 class="modal-title" id="myModalLabel">Demo details</h4>
+	    </div>
+	    <div class="modal-body">
+			<h3>{{demo.name}}</h3>
+			<p>{{demo.summary}}</p>
+			<table>
+			<tr>
+				<td><b>Level: </b></td><td>{{demo.level}}</td>
+			</tr>
+			<tr>
+				<td><b>Technologies:</b></td><td><span ng-repeat="technology in demo.technologies">{{ $last ? (technology) : (technology +', ')}}</span></td>
+			</tr>
+			<tr>
+				<td><b>Products: </b></td><td>{{demo.targetProduct}}</td>
+			</tr>
+			<tr>
+				<td><b>Product Versions: </b></td><td>{{demo.productVersion}}</td>
+			</tr>
+			<tr>
+				<td><b>Prerequisites: </b></td><td>{{demo.prerequisites}}</td>
+			</tr>
+			<tr>
+				<td><b>Authors: </b></td><td>{{demo.author}}</td>
+			</tr>
+			<tr ng-if="demo.img_src!=null">
+				<td colspan="2" align="center"><img src="{{demo.img_src}}"></td>
+			</tr>
+			</table>
+			<a ng-href="{{link.url}}" ng-repeat="link in demo.links" >
+				<button class="btn btn-primary next" style="left: 65%">{{link.name}}</button>
+			</a>						
+			<span ng-if="demo.has_issues"><a ng-href="{{demo.html_url}}/issues"><button class="btn btn-danger" style="left: 65%">Issue</button></a>&nbsp;</span>
+			<span ng-if="demo.has_wiki"><a ng-href="{{demo.html_url}}/wiki"><button class="btn btn-warning" style="left: 65%">Wiki</button></a>&nbsp;</span>
+			<span ng-if="demo.has_pages"><a ng-href="{{demo.homepage}}"><button class="btn btn-warning" style="left: 65%">Site</button></a>&nbsp;</span>
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<h2>Additional Demos</h2>		
+<ul>
+	<li><h3><a href="http://www.jboss.org/products/brms/get-started" target="_blank">JBoss BRMS starter kit</a></h3></li>
+	<li><h3><a href="https://github.com/jbossdemocentral?query=brms" target="_blank">JBoss BRMS projects</a></h3></li>
+	<li><h3><a href="https://github.com/jbossdemocentral?query=integration" target="_blank">JBoss BRMS integration projects</a></h3></li>
+	<li><h3><a href="https://github.com/jbossdemocentral?query=cartridge" target="_blank">xPaaS BRMS & BPM projects</a></h3></li>
+</ul>
+
+
+
